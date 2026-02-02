@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biggest Offer 🎉</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f3f4f6;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+        }
+
+        h1 {
+            color: #1f2937;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+        }
+
+        .btn-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            height: 50px;
+            position: relative;
+            align-items: center;
+        }
+
+        .yes-side {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .no-side {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        #yesBtn {
+            background-color: #22c55e;
+            color: white;
+            transition: transform 0.1s ease;
+        }
+
+        #noBtn {
+            background-color: #ef4444;
+            color: white;
+            /* Faster transition makes it look like it's dodging faster */
+            transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            white-space: nowrap;
+            z-index: 1000;
+            position: relative;
+        }
+
+        #success {
+            display: none;
+            color: #22c55e;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div id="quiz">
+            <h1>Will you be my valentine? ❤️</h1>
+            <div class="btn-wrapper">
+                <div class="yes-side">
+                    <button id="yesBtn">Yes</button>
+                </div>
+                <div class="no-side">
+                    <button id="noBtn" onclick="moveButton()">No</button>
+                </div>
+            </div>
+        </div>
+        <div id="success">Awesome choice (i.e. ME 😎), lesss go 🔥</div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const quiz = document.getElementById('quiz');
+        const success = document.getElementById('success');
+
+        let isFirstHover = true;
+
+        const moveButton = () => {
+            if (isFirstHover) {
+                const rect = noBtn.getBoundingClientRect();
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = rect.left + 'px';
+                noBtn.style.top = rect.top + 'px';
+                noBtn.style.margin = '0';
+                isFirstHover = false;
+            }
+
+            // Move the button to a random spot on the screen
+            const padding = 50;
+            const newX = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding * 2) + padding;
+            const newY = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding * 2) + padding;
+
+            noBtn.style.left = `${newX}px`;
+            noBtn.style.top = `${newY}px`;
+        };
+
+        // NEW LOGIC: Track mouse proximity
+        document.addEventListener('mousemove', (e) => {
+            const btnRect = noBtn.getBoundingClientRect();
+
+            // Calculate center of the button
+            const btnCenterX = btnRect.left + btnRect.width / 2;
+            const btnCenterY = btnRect.top + btnRect.height / 2;
+
+            // Calculate distance between mouse and button center
+            const distance = Math.sqrt(
+                Math.pow(e.clientX - btnCenterX, 2) +
+                Math.pow(e.clientY - btnCenterY, 2)
+            );
+
+            // If mouse is closer than 80 pixels, jump!
+            if (distance < 45) {
+                moveButton();
+            }
+        });
+
+        // Yes button behavior
+        yesBtn.addEventListener('click', () => {
+            quiz.style.display = 'none';
+            noBtn.style.display = 'none';
+            success.style.display = 'block';
+        });
+    </script>
+</body>
+
+</html>
